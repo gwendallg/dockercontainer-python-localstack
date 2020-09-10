@@ -1,0 +1,22 @@
+version: '3'
+services:
+    localstack:
+        image: localstack/localstack
+        ports:
+            - "4566-4584:4566-4584"
+        environment:
+            - SERVICES=s3,sns,sqs
+            - DOCKER_HOST=unix:///var/run/docker.sock
+
+    app:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            args:
+                VRIANT: 3
+        volumes:
+            - ..:/workspace:cached
+        ports:
+            - 9000:9000
+        command: /bin/sh -c "while sleep 1000; do :; done"
+        
